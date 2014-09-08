@@ -1,0 +1,60 @@
+[
+  {
+    "name": "5 ft radius",
+    "shapes":
+    [
+      "lURRDDLLU"
+    ]
+  },
+  {
+    "name": "15 ft cone",
+    "shapes":
+    [
+      "UUURDRDRDLLL",
+      "LULUURRRDDLD",
+      "lLLLURURURDDD",
+      "lLULLDDDRRURU",
+      "ldDDDLULULURRR",
+      "dDRDDLLLUURUR",
+      "dDDDRURURULLL",
+      "RURRDDDLLULU"
+    ]
+  },
+  {
+    "name": "10 ft radius",
+    "shapes":
+    [
+      "uuRDRDDLDLLULUURUR"
+    ]
+  },
+  {
+    "name": "20 ft radius",
+    "shapes":
+    [
+      "uuuuRDRRDDRDDLDDLLDLLULLUULUURUURRUR"
+    ] 
+  },
+  {
+    "name": "30 ft radius",
+    "shapes":
+    [
+      "uuuuuuRDRRDRDRDDRDDLDDLDLDLLDLLULLULULUULUURUURURURRUR"
+    ]
+  },
+  {
+    "name": "40 ft radius",
+    "shapes":
+    [
+      "uuuuuuuuRDRRDRRDRDDRDDRDDLDDLDDLDLLDLLDLLULLULLULUULUULUURUURUURURRURRUR"
+    ]
+  },
+  {
+    "name": "30 ft cone",
+    "shapes":
+    [
+      "UUUUUURDRRDRDRDDRDLLLLLL",
+      "UUULUUURRDRRDRDRDRDLLLDLLL",
+      "UULUULUURRRDRRDRDRDLLDLLDL"
+    ]
+  }
+]

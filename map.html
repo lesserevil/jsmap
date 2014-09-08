@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head> 
+  <body>
+    <canvas id="myCanvas" width="1024" height="768"></canvas>
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      
+      var bgColor = 'white';
+      var gridColor = "rgba(184,184,184,0.4)";
+     
+      var boxWidth = 1022;
+      var boxHeight = 766;
+
+      var argv = {};
+      
+      if (window.location.search) {
+        var params = (window.location.search.substr(1)).split("&");
+
+        for (i = 0; i < params.length; i++) {
+          var a = params[i].split("=");
+          argv[a[0]] = a[1];
+        }
+      }
+ 
+      document.body.onload = function() {
+        var mapinfo = JsonGet(argv['map']);
+        var templates = JsonGet('templates.json');
+
+        function JsonGet(url) {
+          var AJAX_req = new XMLHttpRequest();
+          AJAX_req.open( "GET", url, false );
+          var result;
+          AJAX_req.setRequestHeader("Content-type", "application/json");
+  
+          AJAX_req.onreadystatechange = function() {
+            if( AJAX_req.readyState == 4 && AJAX_req.status == 200 ) {
+              result = JSON.parse( AJAX_req.responseText );
+            }
+          }
+          AJAX_req.send();
+          return result;
+        }
+
+        console.log(mapinfo);
+        console.log(templates);
+  
+        var imgWidth = mapinfo.width;
+        var imgHeight = mapinfo.height;
+
+        var xScale = 30;
+        var yScale = 30;
+
+        var xOrigin = (boxWidth - imgWidth * xScale)/2;
+        var yOrigin = (boxHeight - imgHeight * yScale)/2;
+        
+        var map = new Image();
+        map.src=mapinfo.filename;
+        mapinfo.currentTemplate = -1;
+        
+        function DrawMap() {
+         
+          context.beginPath();
+          context.rect(0,0,boxWidth,boxHeight);
+          context.fillStyle = bgColor;
+          context.fill();
+          
+          context.drawImage(map, 
+            xOrigin, yOrigin,
+            imgWidth * xScale, 
+            imgHeight * yScale);
+  
+	  context.beginPath();
+          for (var i=0; i<imgWidth+1; i++) {
+            var x = xOrigin + xScale * i;
+            context.moveTo(x,yOrigin);
+            context.lineTo(x,yOrigin + imgHeight*yScale);
+          }
+
+          for (var i=0; i<imgHeight+1; i++) {
+            var y = yOrigin + yScale * i;
+            context.moveTo(xOrigin, y);
+            context.lineTo(xOrigin + imgWidth*xScale, y);
+          }
+          context.lineWidth = (xScale + yScale)/32;
+          context.strokeStyle = gridColor;
+          context.stroke();
+
+          for (var i=0; i<mapinfo.masks.length; i++) {
+            if (mapinfo.masks[i].hide) {
+              var mask = mapinfo.masks[i];
+              for (var j=0; j<mask.area.length; j++) {
+                DrawRect(
+                  mask.area[j][0],
+                  mask.area[j][1],
+                  mask.area[j][2],
+                  mask.area[j][3]
+                );
+              }
+            }
+          }
+          if (mapinfo.templates) {
+            for (var i=0; i<mapinfo.templates.length; i++) {
+              var tmpl = mapinfo.templates[i];
+              var x = xOrigin + xScale * tmpl.x;
+              var y = yOrigin + yScale * tmpl.y;
+              var template = templates[tmpl.type];
+              var shape = template.shapes[tmpl.shape];
+
+              context.beginPath();
+              context.moveTo(x,y);
+              for (var j=0; j < shape.length; j++) {
+                var code = shape.substr(j,1);
+                if (code.toLowerCase() == 'u') {
+                  y = y - yScale;
+                } else if (code.toLowerCase() == 'd') {
+                  y = y + yScale;
+                } else if (code.toLowerCase() == 'l') {
+                  x = x - xScale;
+                } else if (code.toLowerCase() == 'r') {
+                  x = x + xScale;
+                }
+                if (code.toUpperCase() == code) {
+                  context.lineTo(x,y);
+                } else {
+                  context.moveTo(x,y);
+                }
+              }
+              context.closePath();
+              context.lineWidth = (xScale + yScale)/16;
+              context.strokeStyle = (mapinfo.currentTemplate == i) ? 'yellow' : 'blue';
+              context.stroke();
+            }
+          }
+        }
+
+        function DrawRect(x, y, w, h) {
+          context.beginPath();
+          context.rect(xOrigin + (x*xScale), yOrigin + (y*yScale), w*xScale, h*yScale);
+          context.fillStyle = 'white';
+          context.fill();
+        }
+
+        function CheckClick(x, y, mask) {
+          for (var i=0; i<mask.area.length; i++) {
+            var area = mask.area[i];
+            var x1 = xOrigin + xScale*area[0];
+            var x2 = x1 + xScale*area[2];
+            var y1 = yOrigin + yScale*area[1];
+            var y2 = y1 + yScale*area[3];
+            if (x1 < x && x <= x2 && y1 < y && y <= y2) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        function UpdateMap(e) {
+          console.log(e);
+          console.log(this.getBoundingClientRect());
+          for (var i = 0; i < mapinfo.masks.length; i++) {
+            if (CheckClick(e.pageX, e.pageY, mapinfo.masks[i])) {
+              mapinfo.masks[i].hide = !(mapinfo.masks[i].hide);
+              break;
+            }
+          }
+          DrawMap();
+        }
+
+        function UpdateTemplates(e) {
+          var key = String.fromCharCode(e.which);
+          console.log(e.which);
+          if (key == ']') {
+            mapinfo.currentTemplate = (mapinfo.currentTemplate >= mapinfo.templates.length-1) ? 0 : mapinfo.currentTemplate + 1;
+          } else if (key == '[') {
+            mapinfo.currentTemplate = (mapinfo.currentTemplate <= 0) ? mapinfo.templates.length-1 : mapinfo.currentTemplate - 1;
+          } else if (key == 'n') {
+            var tmpl = {x:0, y:0, type:0, shape:0};
+            mapinfo.templates.length++;
+            mapinfo.templates[mapinfo.templates.length-1]=tmpl;
+            mapinfo.currentTemplate = mapinfo.templates.length-1;
+          } else if (mapinfo.currentTemplate >=0) {
+            var tmpl = mapinfo.templates[mapinfo.currentTemplate];
+            if (key == 'w') {
+              tmpl.y -= 1;
+            } else if (key == 's') {
+              tmpl.y += 1;
+            } else if (key == 'a') {
+              tmpl.x -= 1;
+            } else if (key == 'd') {
+              tmpl.x += 1;
+            } else if (key == 'e') {
+              tmpl.shape = (tmpl.shape == 0) ? templates[tmpl.type].shapes.length-1 : tmpl.shape - 1;
+            } else if (key == 'q') {
+              tmpl.shape = (tmpl.shape >= templates[tmpl.type].shapes.length-1) ? 0 : tmpl.shape + 1;
+            } else if (e.which == 13) { //Enter
+              mapinfo.currentTemplate = -1;
+            } else if (key == 'r') {
+              tmpl.type = (tmpl.type >= templates.length-1) ? 0 : tmpl.type + 1;
+              tmpl.shape = 0;
+            } else if (key == 't') {
+              for (var i = mapinfo.currentTemplate; i<mapinfo.templates.length-1; i++) {
+                mapinfo.templates[i] = mapinfo.templates[i+1];
+              }
+              mapinfo.templates.length = mapinfo.templates.length-1;
+              mapinfo.currentTemplate = -1;
+            }
+          }
+          DrawMap();
+        }
+
+        map.onload = DrawMap;
+        canvas.onclick = UpdateMap;
+        document.onkeypress = UpdateTemplates;
+      }
+    </script>
+  </body>
+</html>

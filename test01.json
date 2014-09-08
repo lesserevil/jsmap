@@ -1,0 +1,72 @@
+{
+  "templates":
+  [
+  ],
+  "height": 13,
+  "width": 18,
+  "filename": "test01.jpg",
+  "masks":
+  [
+    {
+      "name": "Outside",
+      "hide": false,
+      "area":
+      [
+        [0,0,3,13],
+        [0,0,18,3],
+        [0,10,18,3],
+        [14,0,4,13]
+      ]
+    },
+    {
+      "name":"a",
+      "hide": true,
+      "area":
+      [
+        [3,7,5,3]
+      ]
+    },
+    {
+      "name":"b",
+      "hide":true,
+      "area":
+      [
+        [3,3,5,4],
+        [8,3,2,2]
+      ]
+    },
+    {
+      "name":"c",
+      "hide":true,
+      "area":
+      [
+        [10,3,2,7],
+        [8,5,2,2]
+      ]
+    },
+    {
+      "name":"d",
+      "hide": true,
+      "area":
+      [
+        [8,7,2,2]
+      ]
+    },
+    {
+      "name":"e",
+      "hide":true,
+      "area":
+      [
+        [8,9,2,1]
+      ] 
+    },
+    {
+      "name":"f",
+      "hide":true,
+      "area":
+      [
+        [12,3,2,7]
+      ]
+    }
+  ]
+}
