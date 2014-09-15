@@ -6,7 +6,7 @@ Display and manipulate projected RPG maps
 Quick Start
 -----------
 
-Look at test01.json.  This file describes a map, test.jpg.  
+Look at test01.json.  This file describes a map, test01.jpg.  
 
 Place the map.html, templates.json and test01.\* files in the same directory within a web server.  Browse to http://your.server/path/map.html?map=test01.json.
 
