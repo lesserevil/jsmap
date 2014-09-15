@@ -50,6 +50,44 @@
           return result;
         }
 
+        for (var t=0; t<templates.length; t++) {
+          var tmpl = templates[t];
+          if (!tmpl.static) {
+            var shape = tmpl.shape;
+            tmpl.shapes = [];
+            var center = Math.round(shape.length/2 - 0.5);
+            var arc = tmpl.arc * 2 * Math.PI;
+            for (var r=0; r < 8*center; r++) {
+              var newShape = [];
+              var startAngle = 2*Math.PI*(r/(8*center));
+              var endAngle = startAngle + arc;
+              if (endAngle > 2*Math.PI) {
+                startAngle -= 2*Math.PI;
+                endAngle -= 2*Math.PI;
+              }
+              for (var i=0; i<shape[0].length; i++) {
+                newShape[i] = [];
+                for (var j=0; j<shape.length; j++) {
+                  newShape[i][j]=" ";
+                  if (shape[i][j] == "*") {
+                    var dotAngle = Math.atan2(center-j, i-center);
+                    if (startAngle < dotAngle && dotAngle < endAngle) {
+                      newShape[i][j]="*";
+                    } else {
+                      dotAngle = dotAngle + 2*Math.PI;
+                      if (startAngle < dotAngle && dotAngle < endAngle) {
+                        newShape[i][j]="*";
+                      }
+                    }
+                  }
+                }
+              }
+              tmpl.shapes[tmpl.shapes.length] = newShape;
+            }
+          }
+          tmpl.static=true;
+        }
+
         console.log(mapinfo);
         console.log(templates);
   
