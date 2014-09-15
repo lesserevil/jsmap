@@ -116,30 +116,48 @@
               var shape = template.shapes[tmpl.shape];
 
               context.beginPath();
-              context.moveTo(x,y);
-              for (var j=0; j < shape.length; j++) {
-                var code = shape.substr(j,1);
-                if (code.toLowerCase() == 'u') {
-                  y = y - yScale;
-                } else if (code.toLowerCase() == 'd') {
-                  y = y + yScale;
-                } else if (code.toLowerCase() == 'l') {
-                  x = x - xScale;
-                } else if (code.toLowerCase() == 'r') {
-                  x = x + xScale;
-                }
-                if (code.toUpperCase() == code) {
-                  context.lineTo(x,y);
-                } else {
-                  context.moveTo(x,y);
+              for (var j=0; j < shape[0].length; j++) {
+                for (var k=0; k < shape.length; k++) {
+                  if (shape[j][k] == "*") {
+                    if (j==0) {
+                      DrawSegment(tmpl.x+j, tmpl.y+k, tmpl.x+j, tmpl.y+1+k);
+                    }
+                    if (j==shape[0].length-1) {
+                      DrawSegment(tmpl.x+1+j, tmpl.y+k, tmpl.x+1+j, tmpl.y+1+k);
+                    }
+                    if (k==0) {
+                      DrawSegment(tmpl.x+j, tmpl.y+k, tmpl.x+1+j, tmpl.y+k);
+                    } 
+                    if (k==shape.length-1) {
+                      DrawSegment(tmpl.x+j, tmpl.y+1+k, tmpl.x+1+j, tmpl.y+1+k);
+                    }
+                    if (j>0 && shape[j-1][k] != shape[j][k]) {
+                      DrawSegment(tmpl.x+j, tmpl.y+k, tmpl.x+j, tmpl.y+1+k);
+                    }
+                    if (j<shape[0].length-1 && shape[j+1][k] != shape[j][k]) {
+                      DrawSegment(tmpl.x+1+j, tmpl.y+k, tmpl.x+1+j, tmpl.y+1+k);
+                    }
+                    if (k>0 && shape[j][k-1] != shape[j][k]) {
+                      DrawSegment(tmpl.x+j, tmpl.y+k, tmpl.x+1+j, tmpl.y+k);
+                    }
+                    if (k<shape.length-1 && shape[j][k+1] != shape[j][k]) {
+                      DrawSegment(tmpl.x+j, tmpl.y+1+k, tmpl.x+1+j, tmpl.y+1+k);
+                    }
+                  }
                 }
               }
               context.closePath();
               context.lineWidth = (xScale + yScale)/16;
+              context.lineCap = "round";
               context.strokeStyle = (mapinfo.currentTemplate == i) ? 'yellow' : 'blue';
               context.stroke();
             }
           }
+        }
+
+        function DrawSegment(x0, y0, x1, y1) {
+          context.moveTo(xOrigin + xScale * x0, yOrigin + yScale * y0);
+          context.lineTo(xOrigin + xScale * x1, yOrigin + yScale * y1);
         }
 
         function DrawRect(x, y, w, h) {

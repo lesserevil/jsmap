@@ -1,60 +1,116 @@
 [
   {
     "name": "5 ft radius",
+    "static": true,
     "shapes":
     [
-      "lURRDDLLU"
-    ]
-  },
-  {
-    "name": "15 ft cone",
-    "shapes":
-    [
-      "UUURDRDRDLLL",
-      "LULUURRRDDLD",
-      "lLLLURURURDDD",
-      "lLULLDDDRRURU",
-      "ldDDDLULULURRR",
-      "dDRDDLLLUURUR",
-      "dDDDRURURULLL",
-      "RURRDDDLLULU"
+      ["**",
+       "**"
+      ]
     ]
   },
   {
     "name": "10 ft radius",
+    "static": true,
     "shapes":
     [
-      "uuRDRDDLDLLULUURUR"
+      [" ** ",
+       "****",
+       "****",
+       " ** "
+      ]
+    ]
+  },
+  {
+    "name": "15 ft radius",
+    "static": true,
+    "shapes":
+    [
+      ["  **  ",
+       " **** ",
+       "******",
+       "******",
+       " **** ",
+       "  **  "
+      ]
     ]
   },
   {
     "name": "20 ft radius",
+    "static": true,
     "shapes":
     [
-      "uuuuRDRRDDRDDLDDLLDLLULLUULUURUURRUR"
-    ] 
+      ["   **   ",
+       " ****** ",
+       " ****** ",
+       "********",
+       "********",
+       " ****** ",
+       " ****** ",
+       "   **   "
+      ]
+    ]
+  },
+  {
+    "name": "25 ft radius",
+    "static": true,
+    "shapes":
+    [
+      ["    **    ",
+       "  ******  ",
+       " ******** ",
+       " ******** ",
+       "**********",
+       "**********",
+       " ******** ",
+       " ******** ",
+       "  ******  ",
+       "    **    "
+      ]
+    ]
   },
   {
     "name": "30 ft radius",
+    "static": true,
     "shapes":
     [
-      "uuuuuuRDRRDRDRDDRDDLDDLDLDLLDLLULLULULUULUURUURURURRUR"
+      ["     **     ",
+       "   ******   ",
+       "  ********  ",
+       " ********** ",
+       " ********** ",
+       "************",
+       "************",
+       " ********** ",
+       " ********** ",
+       "  ********  ",
+       "   ******   ",
+       "     **     "
+      ]
     ]
   },
   {
     "name": "40 ft radius",
+    "static": true,
     "shapes":
     [
-      "uuuuuuuuRDRRDRRDRDDRDDRDDLDDLDDLDLLDLLDLLULLULLULUULUULUURUURUURURRURRUR"
-    ]
-  },
-  {
-    "name": "30 ft cone",
-    "shapes":
-    [
-      "UUUUUURDRRDRDRDDRDLLLLLL",
-      "UUULUUURRDRRDRDRDRDLLLDLLL",
-      "UULUULUURRRDRRDRDRDLLDLLDL"
+      ["       **       ",
+       "     ******     ",
+       "   **********   ",
+       "  ************  ",
+       "  ************  ",
+       " ************** ",
+       " ************** ",
+       "****************",
+       "****************",
+       " ************** ",
+       " ************** ",
+       "  ************  ",
+       "  ************  ",
+       "   **********   ",
+       "     ******     ",
+       "       **       "
+      ]
     ]
   }
 ]
